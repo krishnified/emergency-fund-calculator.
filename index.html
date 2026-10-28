@@ -1,294 +1,115 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#0b0b0d">
-  <meta name="description" content="Plan your emergency savings with the KRISHNIFIED Emergency Fund Calculator.">
-  <title>KRISHNIFIED | Emergency Fund Calculator</title>
-  <style>
-    :root {
-      color-scheme: dark;
-      --bg: #09090b;
-      --panel: #131316;
-      --panel-2: #19191e;
-      --line: #2c2c33;
-      --text: #f7f7f8;
-      --muted: #a7a7b0;
-      --gold: #e8c56d;
-      --gold-2: #f6df9c;
-      --green: #8ee0b1;
-      --red: #ff9b9b;
-      --radius: 20px;
-    }
-    * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body {
-      margin: 0;
-      background:
-        radial-gradient(ellipse at 80% -10%, rgba(232,197,109,.12), transparent 34rem),
-        radial-gradient(ellipse at 0% 40%, rgba(104,92,156,.08), transparent 30rem),
-        var(--bg);
-      color: var(--text);
-      font: 16px/1.55 Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    }
-    .wrap { width: min(1100px, calc(100% - 32px)); margin: 0 auto; }
-    header { padding: 26px 0 18px; border-bottom: 1px solid rgba(255,255,255,.08); }
-    .nav { display:flex; align-items:center; justify-content:space-between; gap:16px; }
-    .brand { display:flex; align-items:center; gap:12px; letter-spacing:.11em; font-weight:850; }
-    .mark {
-      display:grid; place-items:center; width:42px; height:42px; border-radius:13px;
-      color:#111; background:linear-gradient(145deg,var(--gold-2),#b98a2d);
-      font-weight:950; letter-spacing:-.06em; box-shadow:0 6px 24px rgba(232,197,109,.15);
-    }
-    .brand small { display:block; font-size:10px; letter-spacing:.24em; color:var(--muted); font-weight:700; margin-top:1px; }
-    .pill { border:1px solid rgba(232,197,109,.38); color:var(--gold-2); border-radius:999px; padding:7px 12px; font-size:12px; font-weight:700; white-space:nowrap; }
-    main { padding: 48px 0 60px; }
-    .hero { max-width:760px; margin-bottom:30px; }
-    .eyebrow { color:var(--gold); text-transform:uppercase; letter-spacing:.2em; font-size:11px; font-weight:800; }
-    h1 { font-size:clamp(34px,6vw,60px); line-height:1.04; letter-spacing:-.055em; margin:12px 0 16px; }
-    h1 span { color:var(--gold-2); }
-    .intro { color:var(--muted); max-width:660px; font-size:17px; margin:0; }
-    .layout { display:grid; grid-template-columns:minmax(0, 1fr) minmax(300px, .9fr); gap:20px; align-items:start; }
-    .card { background:linear-gradient(180deg,rgba(255,255,255,.035),rgba(255,255,255,.012)),var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:24px; box-shadow:0 20px 55px rgba(0,0,0,.16); }
-    .card h2 { font-size:18px; margin:0 0 5px; letter-spacing:-.02em; }
-    .sub { color:var(--muted); font-size:13px; margin:0 0 23px; }
-    .field { margin:0 0 19px; }
-    label { display:flex; justify-content:space-between; align-items:baseline; gap:12px; font-weight:650; font-size:14px; margin-bottom:8px; }
-    label span { color:var(--muted); font-size:12px; font-weight:500; }
-    .input-wrap { position:relative; }
-    .prefix { position:absolute; left:14px; top:50%; transform:translateY(-50%); color:var(--muted); pointer-events:none; }
-    input, select {
-      width:100%; background:#0c0c0f; color:var(--text); border:1px solid #35353d; border-radius:12px;
-      padding:13px 14px; font:inherit; outline:none; transition:border-color .2s, box-shadow .2s;
-    }
-    input.money { padding-left:31px; }
-    input:focus, select:focus { border-color:var(--gold); box-shadow:0 0 0 3px rgba(232,197,109,.12); }
-    .field-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
-    .range-row { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
-    .range-row label { margin:0; }
-    .range-value { color:var(--gold-2); font-size:13px; font-weight:800; }
-    input[type=range] { padding:0; accent-color:var(--gold); border:0; box-shadow:none; background:transparent; }
-    .hint { color:var(--muted); font-size:12px; margin-top:7px; }
-    .btn-row { display:flex; gap:10px; flex-wrap:wrap; margin-top:8px; }
-    button { border:0; border-radius:12px; padding:13px 17px; cursor:pointer; font:inherit; font-weight:800; transition:transform .15s, filter .15s; }
-    button:hover { transform:translateY(-1px); filter:brightness(1.06); }
-    .primary { background:linear-gradient(135deg,var(--gold-2),#c79a3e); color:#17130a; flex:1; }
-    .secondary { background:#24242a; color:var(--text); border:1px solid #3b3b43; }
-    .results { position:sticky; top:20px; }
-    .target-card { padding:22px; border-radius:16px; background:linear-gradient(135deg,rgba(232,197,109,.16),rgba(232,197,109,.035)); border:1px solid rgba(232,197,109,.3); margin:18px 0; }
-    .target-card .caption { color:var(--muted); font-size:13px; }
-    .big-number { font-size:clamp(34px,5vw,46px); font-weight:850; letter-spacing:-.05em; line-height:1.15; margin:5px 0 8px; overflow-wrap:anywhere; }
-    .target-note { color:var(--gold-2); font-size:13px; font-weight:650; }
-    .stats { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
-    .stat { border:1px solid var(--line); background:var(--panel-2); border-radius:14px; padding:15px; min-width:0; }
-    .stat .label { color:var(--muted); font-size:12px; margin-bottom:7px; }
-    .stat .value { font-size:21px; font-weight:800; letter-spacing:-.035em; overflow-wrap:anywhere; }
-    .progress-wrap { margin-top:20px; }
-    .progress-head { display:flex; justify-content:space-between; gap:10px; font-size:13px; margin-bottom:9px; }
-    .progress-head span:last-child { color:var(--gold-2); font-weight:800; }
-    .track { height:10px; border-radius:999px; background:#303037; overflow:hidden; }
-    .bar { width:0; height:100%; border-radius:999px; background:linear-gradient(90deg,#b98a2d,var(--gold-2)); transition:width .25s ease; }
-    .status { margin-top:13px; padding:12px 13px; border-radius:12px; background:#202027; color:var(--muted); font-size:13px; }
-    .status.good { color:var(--green); background:rgba(69,170,117,.1); }
-    .status.warn { color:var(--gold-2); background:rgba(232,197,109,.09); }
-    .mini-title { margin:24px 0 10px; font-size:14px; font-weight:800; }
-    .timeline { display:flex; justify-content:space-between; gap:12px; padding:12px 0; border-bottom:1px solid var(--line); font-size:13px; }
-    .timeline:last-child { border-bottom:0; }
-    .timeline span:first-child { color:var(--muted); }
-    .timeline strong { text-align:right; }
-    .footnote { color:var(--muted); font-size:12px; margin:22px 0 0; }
-    .footer { border-top:1px solid rgba(255,255,255,.08); padding:22px 0 30px; color:var(--muted); font-size:12px; }
-    .footer-inner { display:flex; flex-wrap:wrap; justify-content:space-between; gap:10px; }
-    @media (max-width:800px) { .layout { grid-template-columns:1fr; } .results { position:static; } main { padding-top:35px; } }
-    @media (max-width:480px) { .wrap { width:min(100% - 22px,1100px); } .card { padding:18px; } .field-grid { grid-template-columns:1fr; gap:0; } .pill { display:none; } .brand { font-size:13px; } }
-    @media print { body { background:#fff; color:#111; } .card,.stat { background:#fff; color:#111; box-shadow:none; border-color:#ddd; } .intro,.sub,.hint,.footnote,.footer,.stat .label,.target-card .caption { color:#555; } .btn-row, header .pill { display:none; } }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0756b9">
+<meta name="description" content="KRISHNIFIED Emergency Fund Calculator — plan your financial safety net.">
+<title>KRISHNIFIED | Emergency Fund Calculator</title>
+<style>
+:root{color-scheme:light;--navy:#092754;--blue:#0866d9;--blue2:#0b55b1;--pale:#eaf4ff;--line:#d9e5f4;--muted:#62748f;--white:#fff;--radius:22px}
+*{box-sizing:border-box}body{margin:0;color:var(--navy);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:radial-gradient(ellipse at 100% 10%,#dceeff 0,transparent 34rem),linear-gradient(180deg,#f9fcff,#eef6ff);line-height:1.5}
+.wrap{width:min(1120px,calc(100% - 32px));margin:auto}
+header{background:rgba(255,255,255,.9);border-bottom:1px solid #e3edf9}
+.nav{min-height:78px;display:flex;align-items:center;justify-content:space-between;gap:15px}
+.brand{font-size:clamp(20px,3vw,29px);font-weight:900;letter-spacing:.07em;color:var(--navy)}.brand small{display:block;font-size:10px;letter-spacing:.19em;font-weight:700;color:#5b6b81}
+.tag{background:#e2efff;color:var(--blue2);padding:8px 13px;border-radius:11px;font-size:12px;font-weight:800;white-space:nowrap}
+main{padding:36px 0 48px}.eyebrow{font-size:12px;letter-spacing:.23em;text-transform:uppercase;color:var(--blue);font-weight:850}
+h1{font-size:clamp(34px,5.5vw,53px);line-height:1.08;letter-spacing:-.045em;margin:8px 0 12px;color:var(--navy)}
+.title-line{display:flex;align-items:center;gap:12px;flex-wrap:wrap}.bag{width:48px;height:54px;flex:none}
+.intro{font-size:clamp(16px,2.2vw,20px);color:var(--muted);max-width:850px;margin:0 0 24px}
+.panel{background:rgba(255,255,255,.94);border:1px solid #deebfa;border-radius:var(--radius);padding:23px;margin:16px 0;box-shadow:0 8px 24px rgba(30,92,160,.07)}
+.panel-head{display:flex;align-items:center;gap:13px;margin-bottom:8px}.number{width:42px;height:42px;border-radius:50%;background:var(--blue);color:#fff;display:grid;place-items:center;font-weight:900;font-size:20px;flex:none}
+h2{font-size:clamp(21px,3vw,27px);margin:0;color:var(--blue2);letter-spacing:-.025em}.sub{color:var(--muted);margin:0 0 20px 55px;font-size:15px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px 24px}.field{min-width:0}.field label{display:block;font-size:15px;font-weight:750;margin-bottom:7px}
+.inputbox{display:flex;align-items:center;border:1px solid #d3deed;border-radius:12px;background:#fff;overflow:hidden;box-shadow:inset 0 1px 2px rgba(10,50,100,.025)}
+.prefix{padding:11px 13px;background:#f4f8fd;color:var(--navy);border-right:1px solid #e0e8f2;font-weight:700}
+input,select{font:inherit;color:var(--navy);width:100%;min-width:0;border:0;outline:0;padding:12px 13px;background:transparent}
+.inputbox:focus-within{border-color:var(--blue);box-shadow:0 0 0 3px #0b66d91b}
+.icon-label{display:flex;align-items:center;gap:12px}.field-icon{width:44px;height:44px;border-radius:50%;background:#e7f2ff;color:var(--blue2);display:grid;place-items:center;flex:none}.field-icon svg{width:25px;height:25px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.field-body{min-width:0;flex:1}.field-body label{line-height:1.35}
+.result-panel{background:linear-gradient(135deg,#063d85,#075fc8 72%,#0a6ddd);border:0;color:#fff;padding:22px;box-shadow:0 12px 30px #0756b92b}
+.result-panel h2{color:#fff}.result-panel .number{background:#fff;color:var(--blue2)}.result-panel .panel-head{margin-bottom:17px}
+.results{display:grid;grid-template-columns:1fr 1fr;gap:11px}.result{background:linear-gradient(120deg,#fff,#eaf4ff);border-radius:14px;padding:13px 16px;display:flex;align-items:center;gap:13px;color:var(--navy);min-width:0}
+.result svg{width:30px;height:30px;stroke:var(--blue2);fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.result-label{font-size:13px;color:#28476f}.result-value{font-size:clamp(23px,3vw,32px);font-weight:900;line-height:1.2;letter-spacing:-.03em;overflow-wrap:anywhere}
+.result-wide{grid-column:1/-1}.result-wide .result-value{font-size:clamp(28px,4vw,37px)}.result-wide .result-label{font-size:15px}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0}.btn{border:0;border-radius:12px;padding:13px 18px;font:inherit;font-weight:800;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:9px}
+.btn-primary{background:var(--blue);color:#fff;box-shadow:0 5px 12px #0866d926}.btn-secondary{background:#e1efff;color:var(--blue2)}.btn:hover{filter:brightness(.97)}
+.notice{display:flex;gap:12px;align-items:flex-start;padding:14px 16px;background:#e7f2ff;border-radius:15px;color:#526b89;font-size:13px}.notice-mark{background:#cde5ff;color:var(--blue2);width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-weight:900;flex:none}
+footer{padding:18px 0 28px;color:#71819a;font-size:12px}.footer-inner{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+@media(max-width:700px){.wrap{width:calc(100% - 22px)}main{padding-top:27px}.panel{padding:16px;border-radius:19px}.sub{margin-left:0}.grid{grid-template-columns:1fr;gap:14px}.field-icon{width:40px;height:40px}.results{gap:8px}.result{padding:12px 10px;gap:8px}.result svg{width:25px;height:25px}.result-label{font-size:12px}.result-value{font-size:23px}.nav{min-height:70px}.brand small{font-size:8px}.tag{font-size:10px;padding:7px 9px}}
+@media print{body{background:#fff}.actions{display:none}.panel{box-shadow:none;break-inside:avoid}.result-panel{print-color-adjust:exact;-webkit-print-color-adjust:exact}}
+</style>
 </head>
 <body>
-  <header>
-    <div class="wrap nav">
-      <div class="brand">
-        <div class="mark">K</div>
-        <div>KRISHNIFIED<small>MAKE MONEY MAKE SENSE</small></div>
-      </div>
-      <div class="pill">PERSONAL FINANCE TOOL</div>
+<header><div class="wrap nav"><div class="brand">KRISHNIFIED<small>MONEY TOOLS FOR A BRIGHTER TOMORROW</small></div><div class="tag">FREE TOOL</div></div></header>
+<main class="wrap">
+  <div class="eyebrow">Financial planning tool</div>
+  <div class="title-line">
+    <h1>Emergency Fund Calculator</h1>
+    <svg class="bag" viewBox="0 0 48 54" aria-label="Pound money bag" role="img"><path d="M19 9c0-5 10-5 10 0l-3 5h-4z" fill="#0866d9"/><path d="M18 14c-1-5 11-5 12 0 8 8 13 18 13 27 0 7-6 10-20 10S3 48 3 41c0-9 6-20 15-27z" fill="#0866d9"/><text x="24" y="39" text-anchor="middle" font-size="25" font-weight="800" fill="white">£</text></svg>
+  </div>
+  <p class="intro">Enter your real monthly essentials. Find out how much you need for 3 or 6 months without a salary — and how long it could take you to save it.</p>
+
+  <section class="panel">
+    <div class="panel-head"><div class="number">1</div><h2>Your monthly essential expenses</h2></div>
+    <p class="sub">Enter amounts in pounds (£). Only include expenses you would still need to pay if your income stopped.</p>
+    <div class="grid">
+      <div class="field icon-label"><div class="field-icon"><svg viewBox="0 0 24 24"><path d="m3 10 9-7 9 7M5 9v12h14V9M9 21v-7h6v7"/></svg></div><div class="field-body"><label for="rent">Rent / mortgage (£)</label><div class="inputbox"><span class="prefix">£</span><input id="rent" type="number" min="0" value="800"></div></div></div>
+      <div class="field icon-label"><div class="field-icon"><svg viewBox="0 0 24 24"><path d="M9 18h6M10 22h4M8 14c-1.5-1.3-2-2.8-2-5a6 6 0 0 1 12 0c0 2.2-.5 3.7-2 5l-1 2h-6z"/></svg></div><div class="field-body"><label for="utilities">Utilities, council tax &amp; internet (£)</label><div class="inputbox"><span class="prefix">£</span><input id="utilities" type="number" min="0" value="220"></div></div></div>
+      <div class="field icon-label"><div class="field-icon"><svg viewBox="0 0 24 24"><path d="M3 4h2l2.5 11h11l3-8H6M9 20h.01M18 20h.01"/></svg></div><div class="field-body"><label for="food">Groceries / essential food (£)</label><div class="inputbox"><span class="prefix">£</span><input id="food" type="number" min="0" value="200"></div></div></div>
+      <div class="field icon-label"><div class="field-icon"><svg viewBox="0 0 24 24"><path d="M5 17 3 12l2-6h14l2 6-2 5zM5 17v3M19 17v3M3 12h18M7 15h.01M17 15h.01"/></svg></div><div class="field-body"><label for="travel">Essential travel / transport (£)</label><div class="inputbox"><span class="prefix">£</span><input id="travel" type="number" min="0" value="120"></div></div></div>
+      <div class="field icon-label"><div class="field-icon"><svg viewBox="0 0 24 24"><path d="M5 3h14v18H5zM8 7h8M8 11h8M8 15h4M8 18h3"/></svg></div><div class="field-body"><label for="debt">Minimum loan / debt payments (£)</label><div class="inputbox"><span class="prefix">£</span><input id="debt" type="number" min="0" value="100"></div></div></div>
+      <div class="field icon-label"><div class="field-icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11z"/></svg></div><div class="field-body"><label for="other">Other essentials (insurance, childcare, etc.) (£)</label><div class="inputbox"><span class="prefix">£</span><input id="other" type="number" min="0" value="60"></div></div></div>
     </div>
-  </header>
-  <main class="wrap">
-    <section class="hero">
-      <div class="eyebrow">Plan ahead. Feel prepared.</div>
-      <h1>Your safety net.<br><span>Your peace of mind.</span></h1>
-      <p class="intro">Estimate how much you may want to keep aside for unexpected expenses, and build a practical savings target around your essential monthly costs.</p>
-    </section>
+  </section>
 
-    <div class="layout">
-      <section class="card" aria-labelledby="inputs-title">
-        <h2 id="inputs-title">Your emergency fund plan</h2>
-        <p class="sub">Enter your own figures. All amounts are in pounds sterling (£).</p>
-
-        <div class="field">
-          <label for="expenses">Essential monthly expenses <span>£ per month</span></label>
-          <div class="input-wrap"><span class="prefix">£</span><input class="money" id="expenses" type="number" min="0" step="50" value="1800" inputmode="decimal"></div>
-          <div class="hint">Include housing, bills, food, transport, minimum debt payments and other essentials.</div>
-        </div>
-
-        <div class="field-grid">
-          <div class="field">
-            <label for="savings">Current emergency savings <span>£</span></label>
-            <div class="input-wrap"><span class="prefix">£</span><input class="money" id="savings" type="number" min="0" step="100" value="1500" inputmode="decimal"></div>
-          </div>
-          <div class="field">
-            <label for="monthly">Monthly contribution <span>£</span></label>
-            <div class="input-wrap"><span class="prefix">£</span><input class="money" id="monthly" type="number" min="0" step="25" value="250" inputmode="decimal"></div>
-          </div>
-        </div>
-
-        <div class="field">
-          <div class="range-row"><label for="months">Months of expenses to cover</label><span class="range-value" id="months-value">6 months</span></div>
-          <input id="months" type="range" min="1" max="12" step="1" value="6">
-          <div class="range-row hint"><span>1 month</span><span>12 months</span></div>
-          <div class="hint">A common starting range is 3–6 months. The right amount depends on your circumstances.</div>
-        </div>
-
-        <div class="field">
-          <label for="interest">Estimated annual savings interest <span>% (optional)</span></label>
-          <input id="interest" type="number" min="0" max="20" step="0.1" value="0" inputmode="decimal">
-          <div class="hint">Set to 0% if you want a simpler estimate. The calculator assumes a steady rate and monthly contributions.</div>
-        </div>
-
-        <div class="btn-row">
-          <button class="primary" id="recalculate" type="button">Update my plan</button>
-          <button class="secondary" id="reset" type="button">Reset</button>
-        </div>
-      </section>
-
-      <aside class="card results" aria-live="polite" aria-labelledby="results-title">
-        <h2 id="results-title">Your results</h2>
-        <p class="sub">A simple snapshot of your savings target.</p>
-
-        <div class="target-card">
-          <div class="caption">Recommended target based on your selection</div>
-          <div class="big-number" id="target">£10,800</div>
-          <div class="target-note" id="target-note">6 months of essential expenses</div>
-        </div>
-
-        <div class="stats">
-          <div class="stat"><div class="label">Still to save</div><div class="value" id="gap">£9,300</div></div>
-          <div class="stat"><div class="label">Already covered</div><div class="value" id="covered">14%</div></div>
-          <div class="stat"><div class="label">Time to target</div><div class="value" id="time">38 months</div></div>
-          <div class="stat"><div class="label">After 12 months</div><div class="value" id="oneyear">£4,500</div></div>
-        </div>
-
-        <div class="progress-wrap">
-          <div class="progress-head"><span>Progress toward your target</span><span id="progress-label">14%</span></div>
-          <div class="track" role="progressbar" id="progress" aria-label="Progress toward emergency fund target" aria-valuemin="0" aria-valuemax="100" aria-valuenow="14"><div class="bar" id="bar"></div></div>
-          <div class="status warn" id="status">You have a good start. Keep building your emergency fund steadily.</div>
-        </div>
-
-        <div class="mini-title">Your next milestone</div>
-        <div class="timeline"><span>First month covered</span><strong id="milestone1">£1,800</strong></div>
-        <div class="timeline"><span>Three months covered</span><strong id="milestone3">£5,400</strong></div>
-        <div class="timeline"><span>Target reached by</span><strong id="target-date">—</strong></div>
-
-        <p class="footnote">This is an educational estimate, not financial advice. It does not account for inflation, unexpected withdrawals, taxes or changes in interest rates. Keep emergency savings accessible and consider your own circumstances.</p>
-        <div class="btn-row"><button class="secondary" id="print" type="button">Print / Save as PDF</button></div>
-      </aside>
+  <section class="panel">
+    <div class="panel-head"><div class="number">2</div><h2>Your savings plan</h2></div>
+    <div class="grid">
+      <div class="field icon-label"><div class="field-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><path d="m10 12 2 2 6-7"/></svg></div><div class="field-body"><label for="goal">Emergency fund goal</label><div class="inputbox"><select id="goal"><option value="3">3 months</option><option value="6" selected>6 months</option><option value="9">9 months</option><option value="12">12 months</option></select></div></div></div>
+      <div class="field icon-label"><div class="field-icon"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v5c0 2 4 3 8 3M20 5v4M4 10v5c0 2 4 3 8 3M20 10v4M4 15v4c0 2 4 3 8 3s8-1 8-3v-5"/></svg></div><div class="field-body"><label for="saved">Already saved (£)</label><div class="inputbox"><span class="prefix">£</span><input id="saved" type="number" min="0" value="0"></div></div></div>
+      <div class="field icon-label"><div class="field-icon"><svg viewBox="0 0 24 24"><path d="M4 19V9M10 19V5M16 19v-7M22 19V3"/></svg></div><div class="field-body"><label for="monthly">Can save each month (£)</label><div class="inputbox"><span class="prefix">£</span><input id="monthly" type="number" min="0" value="250"></div></div></div>
+      <div class="field icon-label"><div class="field-icon"><svg viewBox="0 0 24 24"><path d="M3 7h18v14H3zM3 7l3-4h15v4M16 14h5M16 14a2 2 0 1 0 0 4"/></svg></div><div class="field-body"><label for="salary">Monthly take-home salary (£) <span style="font-weight:400;color:#62748f">(optional)</span></label><div class="inputbox"><span class="prefix">£</span><input id="salary" type="number" min="0" placeholder="e.g. 2000"></div></div></div>
     </div>
-  </main>
-  <footer class="footer">
-    <div class="wrap footer-inner"><span>© <span id="year"></span> KRISHNIFIED</span><span>Plan wisely. Prepare confidently.</span></div>
-  </footer>
-  <script>
-    const $ = (id) => document.getElementById(id);
-    const currency = new Intl.NumberFormat('en-GB', { style:'currency', currency:'GBP', maximumFractionDigits:0 });
-    const money = (n) => currency.format(Number.isFinite(n) ? Math.max(0, n) : 0);
-    const number = (id) => {
-      const n = Number($(id).value);
-      return Number.isFinite(n) ? Math.max(0, n) : 0;
-    };
-    function monthsToGoal(start, contribution, rate, target) {
-      if (start >= target) return 0;
-      if (contribution <= 0 && rate <= 0) return Infinity;
-      let balance = start;
-      const monthlyRate = Math.pow(1 + Math.min(rate, 20) / 100, 1/12) - 1;
-      for (let i = 1; i <= 1200; i++) {
-        balance = balance * (1 + monthlyRate) + contribution;
-        if (balance >= target) return i;
-        if (balance > target * 100 && target > 0) return i;
-      }
-      return Infinity;
-    }
-    function balanceAfter(start, contribution, rate, months) {
-      const r = Math.pow(1 + Math.min(rate, 20) / 100, 1/12) - 1;
-      let balance = start;
-      for (let i=0; i<months; i++) balance = balance * (1+r) + contribution;
-      return balance;
-    }
-    function formatDuration(m) {
-      if (!Number.isFinite(m)) return 'Not set';
-      if (m === 0) return 'Reached!';
-      const y = Math.floor(m/12), rem = m%12;
-      if (y && rem) return `${y}y ${rem}m`;
-      if (y) return `${y} ${y===1?'year':'years'}`;
-      return `${rem} ${rem===1?'month':'months'}`;
-    }
-    function targetDate(m) {
-      if (!Number.isFinite(m)) return 'Set a contribution';
-      if (m===0) return 'Already reached';
-      const d = new Date();
-      d.setMonth(d.getMonth()+m);
-      return d.toLocaleDateString('en-GB', {month:'short', year:'numeric'});
-    }
-    function calculate() {
-      const expenses = number('expenses');
-      const savings = number('savings');
-      const contribution = number('monthly');
-      const months = Number($('months').value);
-      const interest = Math.min(number('interest'), 20);
-      $('months-value').textContent = `${months} ${months===1?'month':'months'}`;
-      const target = expenses * months;
-      const remaining = Math.max(0, target - savings);
-      const covered = target > 0 ? Math.min(100, savings/target*100) : 100;
-      const time = monthsToGoal(savings, contribution, interest, target);
-      const yearBalance = balanceAfter(savings, contribution, interest, 12);
-      $('target').textContent = money(target);
-      $('target-note').textContent = `${months} ${months===1?'month':'months'} of essential expenses`;
-      $('gap').textContent = money(remaining);
-      $('covered').textContent = `${Math.round(covered)}%`;
-      $('time').textContent = formatDuration(time);
-      $('oneyear').textContent = money(yearBalance);
-      $('progress-label').textContent = `${Math.round(covered)}%`;
-      $('bar').style.width = `${covered}%`;
-      $('progress').setAttribute('aria-valuenow', String(Math.round(covered)));
-      $('milestone1').textContent = money(expenses);
-      $('milestone3').textContent = money(expenses*3);
-      $('target-date').textContent = target===0 || savings>=target ? 'Already reached' : targetDate(time);
-      const status = $('status');
-      status.className = 'status';
-      if (target===0 || savings>=target) {
-        status.classList.add('good');
-        status.textContent = 'You have reached the target based on the figures entered. Review it when your expenses or circumstances change.';
-      } else if (contribution===0 && interest===0) {
-        status.classList.add('warn');
-        status.textContent = 'Add a monthly savings contribution to estimate how long it may take to reach your target.';
-      } else if (covered>=50) {
-        status.classList.add('good');
-        status.textContent = 'You are more than halfway there. Keep your plan realistic and consistent.';
-      } else {
-        status.classList.add('warn');
-        status.textContent = 'You have a good start. Keep building your emergency fund steadily, at a pace that fits your budget.';
-      }
-    }
-    ['expenses','savings','monthly','months','interest'].forEach(id => $(id).addEventListener('input', calculate));
-    $('recalculate').addEventListener('click', calculate);
-    $('reset').addEventListener('click', () => {
-      $('expenses').value = 1800; $('savings').value = 1500; $('monthly').value = 250;
-      $('months').value = 6; $('interest').value = 0; calculate();
-    });
-    $('print').addEventListener('click', () => window.print());
-    $('year').textContent = new Date().getFullYear();
-    calculate();
-  </script>
+  </section>
+
+  <section class="panel result-panel">
+    <div class="panel-head"><div class="number">3</div><h2>Your personalised result</h2></div>
+    <div class="results">
+      <div class="result"><svg viewBox="0 0 24 24"><path d="M3 7h18v14H3zM3 7l3-4h15v4M16 14h5M16 14a2 2 0 1 0 0 4"/></svg><div><div class="result-label">Monthly essential expenses</div><div class="result-value" id="monthly-total">£1,500</div></div></div>
+      <div class="result"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4M17 3v4M3 10h18M8 14h2M14 14h2M8 17h2"/></svg><div><div class="result-label">3-month emergency fund</div><div class="result-value" id="three">£4,500</div></div></div>
+      <div class="result"><svg viewBox="0 0 24 24"><path d="M4 20v-6M10 20V9M16 20V4M22 20V1"/></svg><div><div class="result-label">6-month emergency fund</div><div class="result-value" id="six">£9,000</div></div></div>
+      <div class="result"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><path d="m10 12 2 2 6-7"/></svg><div><div class="result-label">Your chosen goal</div><div class="result-value" id="chosen">£9,000</div></div></div>
+      <div class="result result-wide"><svg viewBox="0 0 48 54"><path d="M19 9c0-5 10-5 10 0l-3 5h-4z" fill="#0866d9" stroke="none"/><path d="M18 14c-1-5 11-5 12 0 8 8 13 18 13 27 0 7-6 10-20 10S3 48 3 41c0-9 6-20 15-27z" fill="#0866d9" stroke="none"/><text x="24" y="39" text-anchor="middle" font-size="25" font-weight="800" fill="white" stroke="none">£</text></svg><div><div class="result-label">Still need to save</div><div class="result-value" id="remaining">£9,000</div><div id="time" style="font-size:15px">At £250/month, approximately 36 months to reach your goal.</div></div></div>
+    </div>
+  </section>
+  <div class="actions"><button class="btn btn-primary" id="print">▣ &nbsp; Print / Save as PDF</button><button class="btn btn-secondary" id="reset">↻ &nbsp; Reset example</button></div>
+  <div class="notice"><div class="notice-mark">i</div><div>Educational planning tool only, not personalised financial advice. Figures are estimates and exclude interest, inflation and unexpected costs. Keep emergency money accessible and review your target when expenses change. No details are uploaded or stored by this calculator.</div></div>
+</main>
+<footer><div class="wrap footer-inner"><span>© <span id="year"></span> KRISHNIFIED</span><span>Money tools for a brighter tomorrow</span></div></footer>
+<script>
+const ids=['rent','utilities','food','travel','debt','other','saved','monthly','salary'];
+const el=id=>document.getElementById(id);
+const val=id=>Math.max(0,Number(el(id).value)||0);
+const gbp=n=>new Intl.NumberFormat('en-GB',{style:'currency',currency:'GBP',maximumFractionDigits:0}).format(Math.max(0,n));
+function calc(){
+ const total=['rent','utilities','food','travel','debt','other'].reduce((s,id)=>s+val(id),0);
+ const saved=val('saved'), contribution=val('monthly'), goalMonths=Number(el('goal').value), chosen=total*goalMonths;
+ const remaining=Math.max(0,chosen-saved);
+ el('monthly-total').textContent=gbp(total);el('three').textContent=gbp(total*3);el('six').textContent=gbp(total*6);el('chosen').textContent=gbp(chosen);el('remaining').textContent=gbp(remaining);
+ let time;
+ if(remaining===0) time='You have reached your selected goal based on the figures entered.';
+ else if(contribution===0) time='Add a monthly savings amount to estimate how long it could take to reach your goal.';
+ else {const m=Math.ceil(remaining/contribution);time=`At ${gbp(contribution)}/month, approximately ${m} month${m===1?'':'s'} to reach your goal.`;}
+ if(val('salary')>0 && contribution>val('salary')) time+=` Your monthly contribution is higher than the take-home salary entered; please check your figures.`;
+ el('time').textContent=time;
+}
+ids.concat(['goal']).forEach(id=>el(id).addEventListener('input',calc));
+el('print').addEventListener('click',()=>window.print());
+el('reset').addEventListener('click',()=>{el('rent').value=800;el('utilities').value=220;el('food').value=200;el('travel').value=120;el('debt').value=100;el('other').value=60;el('goal').value=6;el('saved').value=0;el('monthly').value=250;el('salary').value='';calc();});
+el('year').textContent=new Date().getFullYear();calc();
+</script>
 </body>
 </html>
