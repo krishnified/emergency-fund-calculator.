@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b0b0d">
+  <meta name="description" content="Plan your emergency savings with the KRISHNIFIED Emergency Fund Calculator.">
+  <title>KRISHNIFIED | Emergency Fund Calculator</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #09090b;
+      --panel: #131316;
+      --panel-2: #19191e;
+      --line: #2c2c33;
+      --text: #f7f7f8;
+      --muted: #a7a7b0;
+      --gold: #e8c56d;
+      --gold-2: #f6df9c;
+      --green: #8ee0b1;
+      --red: #ff9b9b;
+      --radius: 20px;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background:
+        radial-gradient(ellipse at 80% -10%, rgba(232,197,109,.12), transparent 34rem),
+        radial-gradient(ellipse at 0% 40%, rgba(104,92,156,.08), transparent 30rem),
+        var(--bg);
+      color: var(--text);
+      font: 16px/1.55 Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    .wrap { width: min(1100px, calc(100% - 32px)); margin: 0 auto; }
+    header { padding: 26px 0 18px; border-bottom: 1px solid rgba(255,255,255,.08); }
+    .nav { display:flex; align-items:center; justify-content:space-between; gap:16px; }
+    .brand { display:flex; align-items:center; gap:12px; letter-spacing:.11em; font-weight:850; }
+    .mark {
+      display:grid; place-items:center; width:42px; height:42px; border-radius:13px;
+      color:#111; background:linear-gradient(145deg,var(--gold-2),#b98a2d);
+      font-weight:950; letter-spacing:-.06em; box-shadow:0 6px 24px rgba(232,197,109,.15);
+    }
+    .brand small { display:block; font-size:10px; letter-spacing:.24em; color:var(--muted); font-weight:700; margin-top:1px; }
+    .pill { border:1px solid rgba(232,197,109,.38); color:var(--gold-2); border-radius:999px; padding:7px 12px; font-size:12px; font-weight:700; white-space:nowrap; }
+    main { padding: 48px 0 60px; }
+    .hero { max-width:760px; margin-bottom:30px; }
+    .eyebrow { color:var(--gold); text-transform:uppercase; letter-spacing:.2em; font-size:11px; font-weight:800; }
+    h1 { font-size:clamp(34px,6vw,60px); line-height:1.04; letter-spacing:-.055em; margin:12px 0 16px; }
+    h1 span { color:var(--gold-2); }
+    .intro { color:var(--muted); max-width:660px; font-size:17px; margin:0; }
+    .layout { display:grid; grid-template-columns:minmax(0, 1fr) minmax(300px, .9fr); gap:20px; align-items:start; }
+    .card { background:linear-gradient(180deg,rgba(255,255,255,.035),rgba(255,255,255,.012)),var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:24px; box-shadow:0 20px 55px rgba(0,0,0,.16); }
+    .card h2 { font-size:18px; margin:0 0 5px; letter-spacing:-.02em; }
+    .sub { color:var(--muted); font-size:13px; margin:0 0 23px; }
+    .field { margin:0 0 19px; }
+    label { display:flex; justify-content:space-between; align-items:baseline; gap:12px; font-weight:650; font-size:14px; margin-bottom:8px; }
+    label span { color:var(--muted); font-size:12px; font-weight:500; }
+    .input-wrap { position:relative; }
+    .prefix { position:absolute; left:14px; top:50%; transform:translateY(-50%); color:var(--muted); pointer-events:none; }
+    input, select {
+      width:100%; background:#0c0c0f; color:var(--text); border:1px solid #35353d; border-radius:12px;
+      padding:13px 14px; font:inherit; outline:none; transition:border-color .2s, box-shadow .2s;
+    }
+    input.money { padding-left:31px; }
+    input:focus, select:focus { border-color:var(--gold); box-shadow:0 0 0 3px rgba(232,197,109,.12); }
+    .field-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+    .range-row { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
+    .range-row label { margin:0; }
+    .range-value { color:var(--gold-2); font-size:13px; font-weight:800; }
+    input[type=range] { padding:0; accent-color:var(--gold); border:0; box-shadow:none; background:transparent; }
+    .hint { color:var(--muted); font-size:12px; margin-top:7px; }
+    .btn-row { display:flex; gap:10px; flex-wrap:wrap; margin-top:8px; }
+    button { border:0; border-radius:12px; padding:13px 17px; cursor:pointer; font:inherit; font-weight:800; transition:transform .15s, filter .15s; }
+    button:hover { transform:translateY(-1px); filter:brightness(1.06); }
+    .primary { background:linear-gradient(135deg,var(--gold-2),#c79a3e); color:#17130a; flex:1; }
+    .secondary { background:#24242a; color:var(--text); border:1px solid #3b3b43; }
+    .results { position:sticky; top:20px; }
+    .target-card { padding:22px; border-radius:16px; background:linear-gradient(135deg,rgba(232,197,109,.16),rgba(232,197,109,.035)); border:1px solid rgba(232,197,109,.3); margin:18px 0; }
+    .target-card .caption { color:var(--muted); font-size:13px; }
+    .big-number { font-size:clamp(34px,5vw,46px); font-weight:850; letter-spacing:-.05em; line-height:1.15; margin:5px 0 8px; overflow-wrap:anywhere; }
+    .target-note { color:var(--gold-2); font-size:13px; font-weight:650; }
+    .stats { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    .stat { border:1px solid var(--line); background:var(--panel-2); border-radius:14px; padding:15px; min-width:0; }
+    .stat .label { color:var(--muted); font-size:12px; margin-bottom:7px; }
+    .stat .value { font-size:21px; font-weight:800; letter-spacing:-.035em; overflow-wrap:anywhere; }
+    .progress-wrap { margin-top:20px; }
+    .progress-head { display:flex; justify-content:space-between; gap:10px; font-size:13px; margin-bottom:9px; }
+    .progress-head span:last-child { color:var(--gold-2); font-weight:800; }
+    .track { height:10px; border-radius:999px; background:#303037; overflow:hidden; }
+    .bar { width:0; height:100%; border-radius:999px; background:linear-gradient(90deg,#b98a2d,var(--gold-2)); transition:width .25s ease; }
+    .status { margin-top:13px; padding:12px 13px; border-radius:12px; background:#202027; color:var(--muted); font-size:13px; }
+    .status.good { color:var(--green); background:rgba(69,170,117,.1); }
+    .status.warn { color:var(--gold-2); background:rgba(232,197,109,.09); }
+    .mini-title { margin:24px 0 10px; font-size:14px; font-weight:800; }
+    .timeline { display:flex; justify-content:space-between; gap:12px; padding:12px 0; border-bottom:1px solid var(--line); font-size:13px; }
+    .timeline:last-child { border-bottom:0; }
+    .timeline span:first-child { color:var(--muted); }
+    .timeline strong { text-align:right; }
+    .footnote { color:var(--muted); font-size:12px; margin:22px 0 0; }
+    .footer { border-top:1px solid rgba(255,255,255,.08); padding:22px 0 30px; color:var(--muted); font-size:12px; }
+    .footer-inner { display:flex; flex-wrap:wrap; justify-content:space-between; gap:10px; }
+    @media (max-width:800px) { .layout { grid-template-columns:1fr; } .results { position:static; } main { padding-top:35px; } }
+    @media (max-width:480px) { .wrap { width:min(100% - 22px,1100px); } .card { padding:18px; } .field-grid { grid-template-columns:1fr; gap:0; } .pill { display:none; } .brand { font-size:13px; } }
+    @media print { body { background:#fff; color:#111; } .card,.stat { background:#fff; color:#111; box-shadow:none; border-color:#ddd; } .intro,.sub,.hint,.footnote,.footer,.stat .label,.target-card .caption { color:#555; } .btn-row, header .pill { display:none; } }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap nav">
+      <div class="brand">
+        <div class="mark">K</div>
+        <div>KRISHNIFIED<small>MAKE MONEY MAKE SENSE</small></div>
+      </div>
+      <div class="pill">PERSONAL FINANCE TOOL</div>
+    </div>
+  </header>
+  <main class="wrap">
+    <section class="hero">
+      <div class="eyebrow">Plan ahead. Feel prepared.</div>
+      <h1>Your safety net.<br><span>Your peace of mind.</span></h1>
+      <p class="intro">Estimate how much you may want to keep aside for unexpected expenses, and build a practical savings target around your essential monthly costs.</p>
+    </section>
+
+    <div class="layout">
+      <section class="card" aria-labelledby="inputs-title">
+        <h2 id="inputs-title">Your emergency fund plan</h2>
+        <p class="sub">Enter your own figures. All amounts are in pounds sterling (£).</p>
+
+        <div class="field">
+          <label for="expenses">Essential monthly expenses <span>£ per month</span></label>
+          <div class="input-wrap"><span class="prefix">£</span><input class="money" id="expenses" type="number" min="0" step="50" value="1800" inputmode="decimal"></div>
+          <div class="hint">Include housing, bills, food, transport, minimum debt payments and other essentials.</div>
+        </div>
+
+        <div class="field-grid">
+          <div class="field">
+            <label for="savings">Current emergency savings <span>£</span></label>
+            <div class="input-wrap"><span class="prefix">£</span><input class="money" id="savings" type="number" min="0" step="100" value="1500" inputmode="decimal"></div>
+          </div>
+          <div class="field">
+            <label for="monthly">Monthly contribution <span>£</span></label>
+            <div class="input-wrap"><span class="prefix">£</span><input class="money" id="monthly" type="number" min="0" step="25" value="250" inputmode="decimal"></div>
+          </div>
+        </div>
+
+        <div class="field">
+          <div class="range-row"><label for="months">Months of expenses to cover</label><span class="range-value" id="months-value">6 months</span></div>
+          <input id="months" type="range" min="1" max="12" step="1" value="6">
+          <div class="range-row hint"><span>1 month</span><span>12 months</span></div>
+          <div class="hint">A common starting range is 3–6 months. The right amount depends on your circumstances.</div>
+        </div>
+
+        <div class="field">
+          <label for="interest">Estimated annual savings interest <span>% (optional)</span></label>
+          <input id="interest" type="number" min="0" max="20" step="0.1" value="0" inputmode="decimal">
+          <div class="hint">Set to 0% if you want a simpler estimate. The calculator assumes a steady rate and monthly contributions.</div>
+        </div>
+
+        <div class="btn-row">
+          <button class="primary" id="recalculate" type="button">Update my plan</button>
+          <button class="secondary" id="reset" type="button">Reset</button>
+        </div>
+      </section>
+
+      <aside class="card results" aria-live="polite" aria-labelledby="results-title">
+        <h2 id="results-title">Your results</h2>
+        <p class="sub">A simple snapshot of your savings target.</p>
+
+        <div class="target-card">
+          <div class="caption">Recommended target based on your selection</div>
+          <div class="big-number" id="target">£10,800</div>
+          <div class="target-note" id="target-note">6 months of essential expenses</div>
+        </div>
+
+        <div class="stats">
+          <div class="stat"><div class="label">Still to save</div><div class="value" id="gap">£9,300</div></div>
+          <div class="stat"><div class="label">Already covered</div><div class="value" id="covered">14%</div></div>
+          <div class="stat"><div class="label">Time to target</div><div class="value" id="time">38 months</div></div>
+          <div class="stat"><div class="label">After 12 months</div><div class="value" id="oneyear">£4,500</div></div>
+        </div>
+
+        <div class="progress-wrap">
+          <div class="progress-head"><span>Progress toward your target</span><span id="progress-label">14%</span></div>
+          <div class="track" role="progressbar" id="progress" aria-label="Progress toward emergency fund target" aria-valuemin="0" aria-valuemax="100" aria-valuenow="14"><div class="bar" id="bar"></div></div>
+          <div class="status warn" id="status">You have a good start. Keep building your emergency fund steadily.</div>
+        </div>
+
+        <div class="mini-title">Your next milestone</div>
+        <div class="timeline"><span>First month covered</span><strong id="milestone1">£1,800</strong></div>
+        <div class="timeline"><span>Three months covered</span><strong id="milestone3">£5,400</strong></div>
+        <div class="timeline"><span>Target reached by</span><strong id="target-date">—</strong></div>
+
+        <p class="footnote">This is an educational estimate, not financial advice. It does not account for inflation, unexpected withdrawals, taxes or changes in interest rates. Keep emergency savings accessible and consider your own circumstances.</p>
+        <div class="btn-row"><button class="secondary" id="print" type="button">Print / Save as PDF</button></div>
+      </aside>
+    </div>
+  </main>
+  <footer class="footer">
+    <div class="wrap footer-inner"><span>© <span id="year"></span> KRISHNIFIED</span><span>Plan wisely. Prepare confidently.</span></div>
+  </footer>
+  <script>
+    const $ = (id) => document.getElementById(id);
+    const currency = new Intl.NumberFormat('en-GB', { style:'currency', currency:'GBP', maximumFractionDigits:0 });
+    const money = (n) => currency.format(Number.isFinite(n) ? Math.max(0, n) : 0);
+    const number = (id) => {
+      const n = Number($(id).value);
+      return Number.isFinite(n) ? Math.max(0, n) : 0;
+    };
+    function monthsToGoal(start, contribution, rate, target) {
+      if (start >= target) return 0;
+      if (contribution <= 0 && rate <= 0) return Infinity;
+      let balance = start;
+      const monthlyRate = Math.pow(1 + Math.min(rate, 20) / 100, 1/12) - 1;
+      for (let i = 1; i <= 1200; i++) {
+        balance = balance * (1 + monthlyRate) + contribution;
+        if (balance >= target) return i;
+        if (balance > target * 100 && target > 0) return i;
+      }
+      return Infinity;
+    }
+    function balanceAfter(start, contribution, rate, months) {
+      const r = Math.pow(1 + Math.min(rate, 20) / 100, 1/12) - 1;
+      let balance = start;
+      for (let i=0; i<months; i++) balance = balance * (1+r) + contribution;
+      return balance;
+    }
+    function formatDuration(m) {
+      if (!Number.isFinite(m)) return 'Not set';
+      if (m === 0) return 'Reached!';
+      const y = Math.floor(m/12), rem = m%12;
+      if (y && rem) return `${y}y ${rem}m`;
+      if (y) return `${y} ${y===1?'year':'years'}`;
+      return `${rem} ${rem===1?'month':'months'}`;
+    }
+    function targetDate(m) {
+      if (!Number.isFinite(m)) return 'Set a contribution';
+      if (m===0) return 'Already reached';
+      const d = new Date();
+      d.setMonth(d.getMonth()+m);
+      return d.toLocaleDateString('en-GB', {month:'short', year:'numeric'});
+    }
+    function calculate() {
+      const expenses = number('expenses');
+      const savings = number('savings');
+      const contribution = number('monthly');
+      const months = Number($('months').value);
+      const interest = Math.min(number('interest'), 20);
+      $('months-value').textContent = `${months} ${months===1?'month':'months'}`;
+      const target = expenses * months;
+      const remaining = Math.max(0, target - savings);
+      const covered = target > 0 ? Math.min(100, savings/target*100) : 100;
+      const time = monthsToGoal(savings, contribution, interest, target);
+      const yearBalance = balanceAfter(savings, contribution, interest, 12);
+      $('target').textContent = money(target);
+      $('target-note').textContent = `${months} ${months===1?'month':'months'} of essential expenses`;
+      $('gap').textContent = money(remaining);
+      $('covered').textContent = `${Math.round(covered)}%`;
+      $('time').textContent = formatDuration(time);
+      $('oneyear').textContent = money(yearBalance);
+      $('progress-label').textContent = `${Math.round(covered)}%`;
+      $('bar').style.width = `${covered}%`;
+      $('progress').setAttribute('aria-valuenow', String(Math.round(covered)));
+      $('milestone1').textContent = money(expenses);
+      $('milestone3').textContent = money(expenses*3);
+      $('target-date').textContent = target===0 || savings>=target ? 'Already reached' : targetDate(time);
+      const status = $('status');
+      status.className = 'status';
+      if (target===0 || savings>=target) {
+        status.classList.add('good');
+        status.textContent = 'You have reached the target based on the figures entered. Review it when your expenses or circumstances change.';
+      } else if (contribution===0 && interest===0) {
+        status.classList.add('warn');
+        status.textContent = 'Add a monthly savings contribution to estimate how long it may take to reach your target.';
+      } else if (covered>=50) {
+        status.classList.add('good');
+        status.textContent = 'You are more than halfway there. Keep your plan realistic and consistent.';
+      } else {
+        status.classList.add('warn');
+        status.textContent = 'You have a good start. Keep building your emergency fund steadily, at a pace that fits your budget.';
+      }
+    }
+    ['expenses','savings','monthly','months','interest'].forEach(id => $(id).addEventListener('input', calculate));
+    $('recalculate').addEventListener('click', calculate);
+    $('reset').addEventListener('click', () => {
+      $('expenses').value = 1800; $('savings').value = 1500; $('monthly').value = 250;
+      $('months').value = 6; $('interest').value = 0; calculate();
+    });
+    $('print').addEventListener('click', () => window.print());
+    $('year').textContent = new Date().getFullYear();
+    calculate();
+  </script>
+</body>
+</html>
